@@ -1,5 +1,5 @@
 import Footer from "../components/Footer";
-import { Navbar } from "../components/landing/HeroSection";
+import { SiteNavbar } from "@/components/navigation/SiteNavbar";
 import { FAQAccordion } from "./components/FAQAccordion";
 import { HelpAssistant } from "./components/HelpAssistant";
 import { helpCenterFaqs } from "@/data/help-center";
@@ -12,8 +12,8 @@ export const metadata = {
 
 export default function HelpCenterPage() {
   return (
-    <div className="min-h-screen bg-black text-white">
-        <Navbar />
+  <div className="min-h-screen bg-black text-white">
+    <SiteNavbar variant="marketing" />
       <div className="relative overflow-hidden pt-28 pb-16">
         <div className="absolute inset-0 opacity-40 pointer-events-none">
           <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[680px] h-[680px] bg-purple-600/20 blur-[160px]" />

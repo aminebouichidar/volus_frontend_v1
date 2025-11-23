@@ -14,7 +14,7 @@ import {
   MessageSquareHeart,
   Radar,
 } from "lucide-react";
-import { Navbar } from "../components/landing/HeroSection";
+import { SiteNavbar } from "@/components/navigation/SiteNavbar";
 import Footer from "../components/Footer";
 
 const signalSources = [
@@ -73,7 +73,7 @@ export default function SentimentPage() {
     <div className="relative min-h-screen bg-black text-white">
       <BackgroundAura />
       <main className="relative z-10">
-        <Navbar />
+        <SiteNavbar variant="marketing" />
         <Hero />
         <SignalSection />
         <AnimatedValueSection />

@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import Lenis from 'lenis';
 import { useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { Navbar } from '../components/landing/HeroSection';
+import { SiteNavbar } from '@/components/navigation/SiteNavbar';
 import Footer from '../components/Footer';
 import { ZoomParallax } from '@/components/ui/zoom-parallax';
 import PricingSection from '../components/landing/PricingSection';
@@ -143,7 +143,7 @@ export default function MultiChannelMonitoringPage() {
 
   return (
     <div className="min-h-screen bg-[#03000A] text-white">
-      <Navbar />
+      <SiteNavbar variant="marketing" />
     <main>
         <Hero />
         <ChannelRibbon />

@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import DashboardClient from "./DashboardClient";
+import DashboardClient from "./ControlRoomClient";
+import { getUserSubscription } from "@/lib/user-actions";
 
 export default async function UserDashboard() {
   const session = await auth();
@@ -9,5 +10,7 @@ export default async function UserDashboard() {
     redirect("/signin");
   }
 
-  return <DashboardClient user={session.user} />;
+  const subscription = await getUserSubscription(session.user.id);
+
+  return <DashboardClient user={session.user} subscription={subscription} />;
 }

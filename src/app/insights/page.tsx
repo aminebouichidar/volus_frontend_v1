@@ -1,5 +1,5 @@
 import Footer from "../components/Footer";
-import { Navbar } from "../components/landing/HeroSection";
+import { SiteNavbar } from "@/components/navigation/SiteNavbar";
 import { InsightsResults } from "./ResultsClient";
 
 
@@ -23,7 +23,7 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
       </div>
 
       <main className="relative z-10">
-        <Navbar />
+        <SiteNavbar variant="marketing" />
         <section className="px-4 pt-28 pb-24 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-5xl">
             <header className="mb-10 space-y-4">

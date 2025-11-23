@@ -7,7 +7,7 @@ import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ContainerScroll, CardSticky } from '@/components/blocks/cards-stack';
-import { Navbar } from '../components/landing/HeroSection';
+import { SiteNavbar } from '@/components/navigation/SiteNavbar';
 import PricingSection from '../components/landing/PricingSection';
 import Footer from '../components/Footer';
 
@@ -212,7 +212,7 @@ export default function PredictiveForecastingPage() {
 
   return (
     <div className="min-h-screen bg-[#05020E] text-white">
-      <Navbar />
+      <SiteNavbar variant="marketing" />
       <Hero />
       <CapabilityGrid />
       <PredictiveLoop />

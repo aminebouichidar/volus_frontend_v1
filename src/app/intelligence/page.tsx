@@ -1,6 +1,6 @@
 'use client';
 
-import { Navbar } from '@/app/components/landing/HeroSection';
+import { SiteNavbar } from '@/components/navigation/SiteNavbar';
 import Footer from '@/app/components/Footer';
 import PricingSection from '@/app/components/landing/PricingSection';
 import IntelligenceGrid from './IntelligenceGrid';
@@ -8,6 +8,7 @@ import { motion } from 'motion/react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowRight, BrainCircuit, Globe, Lock, Zap } from 'lucide-react';
+import { BGPattern } from '../ui/backgrounds/bg-patterns';
 
 export default function IntelligencePage() {
   return (
@@ -18,11 +19,12 @@ export default function IntelligencePage() {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[50vh] bg-indigo-600/10 blur-[120px] opacity-50" />
       </div>
 
-      <Navbar />
+  <SiteNavbar variant="marketing" />
 
       <main className="relative z-10 pt-24">
         {/* Hero Section */}
         <section className="relative px-4 py-20 sm:px-6 lg:px-8">
+          <BGPattern variant="grid" mask="fade-edges" />
           <div className="mx-auto max-w-5xl text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -49,13 +51,13 @@ export default function IntelligencePage() {
 
               <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Link href="/signup">
-                  <Button size="lg" className="h-12 rounded-full bg-white px-8 text-black hover:bg-gray-200">
-                    Start Intelligence Scan
+                  <Button size="lg" className="h-12 cursor-pointer rounded-full bg-white px-8 text-black hover:bg-gray-300">
+                    Start Scanning
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
-                <Link href="/demo">
-                  <Button size="lg" variant="outline" className="h-12 rounded-full border-white/10 bg-white/5 px-8 text-white hover:bg-white/10">
+                <Link href="/demo-volus">
+                  <Button size="lg" variant="outline" className="h-12 cursor-pointer rounded-full border-white/10 bg-white/5 px-8 text-white hover:bg-white/10">
                     Watch Demo
                   </Button>
                 </Link>

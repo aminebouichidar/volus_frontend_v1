@@ -1,5 +1,5 @@
 import Footer from "@/app/components/Footer";
-import { Navbar } from "@/app/components/landing/HeroSection";
+import { SiteNavbar } from "@/components/navigation/SiteNavbar";
 import { ProductInsightsClient } from "./ProductInsightsClient";
 
 
@@ -21,7 +21,7 @@ export default async function ProductInsightsPage({ searchParams }: ProductInsig
       </div>
 
       <main className="relative z-10">
-        <Navbar />
+        <SiteNavbar variant="marketing" />
         <section className="px-4 pt-28 pb-24 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-6xl">
             <ProductInsightsClient encodedPayload={encodedPayload} />

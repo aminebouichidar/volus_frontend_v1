@@ -72,62 +72,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
+    async jwt({ token, user, trigger, session, account }) {
+      // On initial sign-in
       if (user) {
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
         token.picture = user.image;
-      }
-
-      const tokenUserId = token.id as string | undefined;
-
-      if (tokenUserId && (!token.subscription || trigger === "update")) {
-        const dbUser = await prisma.user.findUnique({
-          where: { id: tokenUserId },
-          include: { subscription: true },
-        });
-
-        if (dbUser) {
-          token.emailVerified = dbUser.emailVerified?.toISOString() ?? null;
-
-          if (!dbUser.subscription && dbUser.emailVerified) {
-            try {
-              const subscription = await ensureTrialSubscriptionForUser(
-                dbUser.id
-              );
-
-              if (subscription) {
-                token.subscription = {
-                  status: subscription.status,
-                  trialEndsAt: subscription.trialEndsAt?.toISOString() ?? null,
-                  currentPeriodEnd:
-                    subscription.currentPeriodEnd?.toISOString() ?? null,
-                  stripeCustomerId: subscription.stripeCustomerId,
-                  stripeSubscriptionId: subscription.stripeSubscriptionId,
-                };
-              }
-            } catch (error) {
-              console.error("Subscription provisioning failed", error);
-            }
-          }
-
-          if (dbUser.subscription) {
-            token.subscription = {
-              status: dbUser.subscription.status,
-              trialEndsAt: dbUser.subscription.trialEndsAt
-                ? dbUser.subscription.trialEndsAt.toISOString()
-                : null,
-              currentPeriodEnd: dbUser.subscription.currentPeriodEnd
-                ? dbUser.subscription.currentPeriodEnd.toISOString()
-                : null,
-              stripeCustomerId: dbUser.subscription.stripeCustomerId,
-              stripeSubscriptionId: dbUser.subscription.stripeSubscriptionId,
-            };
-          }
+        
+        // For Google OAuth, mark email as verified
+        if (account?.provider === "google") {
+          token.emailVerified = new Date().toISOString();
+        } else {
+          token.emailVerified = user.emailVerified ? new Date(user.emailVerified).toISOString() : null;
         }
       }
 
+      // Handle session updates from client
       if (trigger === "update" && session) {
         token = { ...token, ...session };
       }
@@ -171,7 +132,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
   events: {
-    async signIn({ user }) {
+    async signIn({ user, account }) {
+      // For Google OAuth, set emailVerified on first sign-in
+      if (account?.provider === "google" && user.id && !user.emailVerified) {
+        try {
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { emailVerified: new Date() },
+          });
+        } catch (error) {
+          console.error("Failed to set emailVerified for Google user", error);
+        }
+      }
+
       if (user.id && user.emailVerified) {
         try {
           await ensureTrialSubscriptionForUser(user.id);

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Footer from "../components/Footer";
-import { Navbar } from "../components/landing/HeroSection";
+import { SiteNavbar } from "@/components/navigation/SiteNavbar";
 import PricingSection from "../components/landing/PricingSection";
 import CommerceIntelShowcase from "./CommerceIntelShowcase";
 
@@ -130,7 +130,7 @@ export default function EcommerceAnalyticsPage() {
       </div>
 
       <div className="relative z-10">
-        <Navbar />
+        <SiteNavbar variant="marketing" />
 
         <main>
           <section className="px-4 pt-28 pb-24 sm:px-6 lg:px-8">
