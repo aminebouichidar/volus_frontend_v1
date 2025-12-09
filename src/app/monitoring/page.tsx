@@ -2,12 +2,14 @@
 
 import { motion } from 'motion/react';
 import Lenis from 'lenis';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { SiteNavbar } from '@/components/navigation/SiteNavbar';
 import Footer from '../components/Footer';
 import { ZoomParallax } from '@/components/ui/zoom-parallax';
 import PricingSection from '../components/landing/PricingSection';
+import { Button } from '@/components/ui/button';
 
 const heroStats = [
   { label: 'Data sources monitored', value: '42+', detail: 'E-commerce, social media, news, blogs' },
@@ -67,7 +69,7 @@ const signalStories = [
 const coverageMatrix = [
   {
     family: 'E-commerce platforms',
-    entries: ['Amazon (retail + 3P marketplace)', 'Shopify stores', 'Walmart marketplace', 'Target & big-box retailers', 'Etsy & handmade marketplaces'],
+    entries: ['Amazon (retail + 3P marketplace)', 'Shopify stores', 'Target & big-box retailers', 'Etsy & handmade marketplaces'],
   },
   {
     family: 'Social media & communities',
@@ -91,7 +93,7 @@ const productSignals = [
   },
   {
     title: 'Intelligent data filtering',
-    description: 'Machine learning models eliminate spam, bots, and irrelevant noise—keeping only verified, meaningful data that impacts your products.',
+    description: 'Machine learning models eliminate spam, bots, and irrelevant noise keeping only verified, meaningful data that impacts your products.',
     metric: 'AI-filtered',
   },
   {
@@ -185,6 +187,17 @@ export default function MultiChannelMonitoringPage() {
 }
 
 function Hero() {
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+  const isDisabled = useMemo(() => !query.trim(), [query]);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const nextQuery = query.trim();
+    if (!nextQuery) return;
+    router.push(`/insights?query=${encodeURIComponent(nextQuery)}`);
+  };
+
   return (
     <section className="relative overflow-hidden px-4 pt-28 pb-20 sm:px-6 sm:pt-32 sm:pb-24">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(56,189,248,0.12),_transparent_65%)]" />
@@ -218,6 +231,32 @@ function Hero() {
           >
             We monitor 42+ data sources e-commerce platforms, social media, news, blogs, and YouTube, filtering out spam and noise with advanced NLP and sentiment analysis. Get decision-ready insights in under 90 seconds, whether you&apos;re a solo builder or a Fortune 500 team.
           </motion.p>
+
+          <motion.form
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+            onSubmit={handleSubmit}
+            className="mt-6 max-w-lg space-y-3"
+          >
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Monitor a brand or topic..."
+                className="flex-1 bg-white/5 border border-white/15 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/30 text-gray-100 rounded-full px-5 py-3 outline-none transition"
+                aria-label="Monitoring search"
+              />
+              <Button
+                type="submit"
+                disabled={isDisabled}
+                className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold px-6 py-3 rounded-full h-auto"
+              >
+                Track
+              </Button>
+            </div>
+          </motion.form>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -372,7 +411,7 @@ function ProductLens() {
           <p className="text-xs uppercase tracking-[0.5em] text-cyan-200/80">Intelligence that understands context</p>
           <h3 className="text-2xl font-semibold text-balance sm:text-3xl">From raw data to confident decisions</h3>
           <p className="text-sm text-gray-300 sm:text-base">
-            Our AI doesn&apos;t just collect data—it understands it. Using natural language processing and sentiment analysis, we transform millions of data points into insights you can trust, whether you&apos;re tracking product performance, competitive moves, or market trends.
+            Our AI doesn&apos;t just collect data; it understands it. Using natural language processing and sentiment analysis, we transform millions of data points into insights you can trust, whether you&apos;re tracking product performance, competitive moves, or market trends.
           </p>
         </div>
         <div className="grid flex-1 gap-6 sm:grid-cols-3">
@@ -397,7 +436,7 @@ function InsightsStrata() {
     },
     {
       title: 'Noise filtering & NLP',
-      copy: 'Advanced NLP and sentiment analysis remove spam, bots, and irrelevant chatter—keeping only verified, meaningful data.',
+      copy: 'Advanced NLP and sentiment analysis remove spam, bots, and irrelevant chatter keeping only verified, meaningful data.',
     },
     {
       title: 'Decision-ready insights',
@@ -483,7 +522,7 @@ function PulseCTA() {
         <p className="text-xs uppercase tracking-[0.5em] text-white/70">Ready to eliminate the noise?</p>
         <h2 className="text-3xl font-semibold text-balance sm:text-4xl">Start getting decision-ready insights in under an hour</h2>
         <p className="text-sm text-white/80 sm:text-base">
-          Connect your data sources—e-commerce platforms, social media, news feeds, or custom APIs—and let our AI filter billions of signals to deliver only what matters. Built for solo builders and enterprise teams alike.
+          Connect your data sources, e-commerce platforms, social media, news feeds, or custom APIs, and let our AI filter billions of signals to deliver only what matters. Built for solo builders and enterprise teams alike.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <Link href="/signup" className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-black shadow-lg">

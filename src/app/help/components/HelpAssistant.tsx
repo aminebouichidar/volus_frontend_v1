@@ -4,6 +4,8 @@ import { useMemo, useState } from 'react';
 import { Loader2, SendHorizontal, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { VolusTetrisLoader } from './VolusTetrisLoader';
+import { LockedTile } from '@/components/ui/locked-tile';
+import { hasPlanAccess, PlanTier, planLabel } from '@/lib/plan-tiers';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -112,7 +114,11 @@ function MessageContent({ text }: { text: string }) {
   );
 }
 
-export function HelpAssistant() {
+type AssistantProps = {
+  planTier?: PlanTier;
+};
+
+export function HelpAssistant({ planTier = 'starter' }: AssistantProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'assistant',
@@ -125,6 +131,12 @@ export function HelpAssistant() {
   const [error, setError] = useState('');
 
   const conversationHistory = useMemo(() => messages.slice(-8), [messages]);
+
+  const unlockedPro = hasPlanAccess(planTier, 'pro');
+  const unlockedEnterprise = hasPlanAccess(planTier, 'enterprise');
+  const turnLimit = unlockedPro ? 30 : 6;
+  const isCapped = messages.filter((m) => m.role === 'user').length >= turnLimit;
+  const lockedLabel = unlockedPro ? 'Unlimited concierge' : 'Pro unlocks longer threads';
 
   const sendMessage = async (text?: string) => {
     const payload = (text ?? input).trim();
@@ -185,6 +197,9 @@ export function HelpAssistant() {
             Live AI agent
           </div>
           <h3 className="text-3xl font-semibold text-white">Ask the Volus AI concierge</h3>
+          <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white">
+            Plan: {planLabel(planTier)} {unlockedEnterprise ? '• priority routing' : ''}
+          </p>
           <p className="text-sm text-gray-300 leading-relaxed">
             The assistant runs on-prem and is grounded in the same documentation our success team uses. It can troubleshoot flows, explain features, or escalate to a human teammate.
           </p>
@@ -243,28 +258,36 @@ export function HelpAssistant() {
             {error && (
               <div className="px-5 pb-2 text-sm text-red-300">{error}</div>
             )}
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                sendMessage();
-              }}
-              className="border-t border-white/5 p-4 flex gap-2"
+            <LockedTile
+              unlocked={!isCapped}
+              label={lockedLabel}
+              description={unlockedPro ? 'Enterprise gets priority SLA + human handoff' : 'Starter includes 6 turns per thread'}
+              upgradeHref="/#pricing"
             >
-              <input
-                className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
-                placeholder="Ask about plans, features, or troubleshooting..."
-                value={input}
-                onChange={(event) => setInput(event.target.value)}
-                disabled={isLoading}
-              />
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="rounded-2xl cursor-pointer bg-indigo-500/20 border-2 border-indigo-500/40 hover:bg-indigo-500/30 hover:border-indigo-400/60 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 px-4 shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/20"
-                >
-                {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <SendHorizontal className="w-4 h-4" />}
-              </Button>
-            </form>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (isCapped) return;
+                  sendMessage();
+                }}
+                className="border-t border-white/5 p-4 flex gap-2"
+              >
+                <input
+                  className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+                  placeholder="Ask about plans, features, or troubleshooting..."
+                  value={input}
+                  onChange={(event) => setInput(event.target.value)}
+                  disabled={isLoading || isCapped}
+                />
+                <Button
+                  type="submit"
+                  disabled={isLoading || isCapped}
+                  className="rounded-2xl cursor-pointer bg-indigo-500/20 border-2 border-indigo-500/40 hover:bg-indigo-500/30 hover:border-indigo-400/60 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 px-4 shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/20"
+                  >
+                  {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <SendHorizontal className="w-4 h-4" />}
+                </Button>
+              </form>
+            </LockedTile>
           </div>
         </div>
       </div>

@@ -3,6 +3,9 @@ import { SiteNavbar } from "@/components/navigation/SiteNavbar";
 import { FAQAccordion } from "./components/FAQAccordion";
 import { HelpAssistant } from "./components/HelpAssistant";
 import { helpCenterFaqs } from "@/data/help-center";
+import { auth } from "@/auth";
+import { getUserSubscription } from "@/lib/user-actions";
+import { determinePlanTier, planLabel } from "@/lib/plan-tiers";
 
 export const metadata = {
   title: "Help Center | Volus AI",
@@ -10,10 +13,15 @@ export const metadata = {
     "Guides, FAQs, and the Volus AI assistant to help you troubleshoot billing, insights, and automation workflows.",
 };
 
-export default function HelpCenterPage() {
+export default async function HelpCenterPage() {
+  const session = await auth();
+  const subscription = await getUserSubscription(session?.user?.id);
+  const planTier = determinePlanTier(subscription);
+  const badge = { title: planLabel(planTier), description: "Help & Concierge" };
+
   return (
   <div className="min-h-screen bg-black text-white">
-    <SiteNavbar variant="marketing" />
+    <SiteNavbar variant="marketing" planBadge={badge} />
       <div className="relative overflow-hidden pt-28 pb-16">
         <div className="absolute inset-0 opacity-40 pointer-events-none">
           <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[680px] h-[680px] bg-purple-600/20 blur-[160px]" />
@@ -56,7 +64,7 @@ export default function HelpCenterPage() {
           <FAQAccordion faqs={helpCenterFaqs} />
         </section>
 
-        <HelpAssistant />
+        <HelpAssistant planTier={planTier} />
       </main>
       <Footer />
     </div>

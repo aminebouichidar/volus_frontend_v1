@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { DASHBOARD_SUMMARY_FALLBACK } from "@/lib/dashboard-summary";
 
-const FASTAPI_BASE_URL = process.env.FASTAPI_BASE_URL ?? "http://127.0.0.1:8000";
+const FASTAPI_BASE_URL = process.env.FASTAPI_BASE_URL ?? "http://127.0.0.1:8001";
 
 export async function GET() {
   try {

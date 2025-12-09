@@ -9,26 +9,50 @@ import { MenuToggleIcon } from "@/app/ui/random/menu-toggle-icon";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useSession, signOut } from "next-auth/react";
+import {
+  SmilePlus,
+  BarChart3,
+  ScanEye,
+  ShoppingCart,
+  Shield,
+  Users,
+  TrendingUp,
+  FileText,
+  Award,
+  PenLine,
+  HelpCircle,
+  type LucideIcon,
+} from "lucide-react";
 
-const platformLinks = [
-  { label: "Sentiment Analysis", href: "/sentiment", description: "Track customer emotions across platforms" },
-  { label: "Predictive Forecasting", href: "/forecasting", description: "AI-powered demand predictions" },
-  { label: "Market Intelligence", href: "/intelligence", description: "Real-time competitive insights" },
-  { label: "Multi-Channel Monitoring", href: "/monitoring", description: "Amazon, eBay, Social & more" },
+interface NavLink {
+  label: string;
+  href: string;
+  description: string;
+  icon: LucideIcon;
+}
+
+const platformLinks: NavLink[] = [
+  { label: "Trend Explorer", href: "/trends-explorer", description: "See hottest multi-source products", icon: TrendingUp },
+  { label: "Semantic Search", href: "/semantic-search", description: "Natural language product discovery", icon: ScanEye },
+  { label: "Prediction Lab", href: "/prediction-lab", description: "Forward-looking demand simulations", icon: BarChart3 },
+  { label: "Sentiment Analysis", href: "/sentiment", description: "Track customer emotions across platforms", icon: SmilePlus },
+  { label: "Multi-Channel Monitoring", href: "/monitoring", description: "Amazon, eBay, Social & more", icon: ScanEye },
 ];
 
-const solutionsLinks = [
-  { label: "E-commerce Analytics", href: "/ecommerce", description: "Optimize your online sales" },
-  { label: "Brand Monitoring", href: "/brand", description: "Protect your reputation" },
-  { label: "Competitor Analysis", href: "/competitor", description: "Stay ahead of the market" },
-  { label: "Demand Forecasting", href: "/demand", description: "Plan inventory effectively" },
+const solutionsLinks: NavLink[] = [
+  { label: "E-commerce Analytics", href: "/ecommerce", description: "Optimize your online sales", icon: ShoppingCart },
+  { label: "Brand Monitoring", href: "/brand", description: "Protect your reputation", icon: Shield },
+  { label: "Competitor Analysis", href: "/competitor", description: "Stay ahead of the market", icon: Users },
+  { label: "Demand Forecasting", href: "/forecasting", description: "Plan inventory effectively", icon: TrendingUp },
+  { label: "Enterprise Control Room", href: "/enterprise-control", description: "Governance, alerts, exec rollups", icon: Shield },
+  { label: "Growth Playbooks", href: "/growth-playbooks", description: "Action plans for any team size", icon: BarChart3 },
 ];
 
-const resourcesLinks = [
-  { label: "Documentation", href: "/docs", description: "API guides and tutorials" },
-  { label: "Case Studies", href: "/cases", description: "Success stories" },
-  { label: "Blog", href: "/blog", description: "Latest insights" },
-  { label: "Help Center", href: "/help", description: "Get support" },
+const resourcesLinks: NavLink[] = [
+  { label: "Documentation", href: "/docs", description: "API guides and tutorials", icon: FileText },
+  { label: "Case Studies", href: "/cases", description: "Success stories", icon: Award },
+  { label: "Blog", href: "/blog", description: "Latest insights", icon: PenLine },
+  { label: "Help Center", href: "/help", description: "Get support", icon: HelpCircle },
 ];
 
 const dropdownSections = [
@@ -132,7 +156,7 @@ export function SiteNavbar({ variant = "marketing", planBadge }: SiteNavbarProps
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setUserMenuOpen((prev) => !prev)}
-          className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-2 py-1 pr-3"
+          className="flex cursor-pointer items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-2 py-1 pr-3"
         >
           <Avatar name={user?.name} image={user?.image ?? undefined} />
           <div className="hidden sm:block text-left">
@@ -159,7 +183,7 @@ export function SiteNavbar({ variant = "marketing", planBadge }: SiteNavbarProps
               Profile & settings
             </Link>
             <button
-              className="block cursor-pointer w-full rounded-xl px-3 py-2 text-left text-sm text-rose-200 hover:bg-white/5"
+              className="block cursor-pointer w-full rounded-xl px-3 py-2 text-left text-sm text-red-200 hover:bg-white/5"
               onClick={() => {
                 setUserMenuOpen(false);
                 signOut({ callbackUrl: "/" });
@@ -191,12 +215,12 @@ export function SiteNavbar({ variant = "marketing", planBadge }: SiteNavbarProps
 
   const baseNavClass = cn(
     "fixed top-0 left-0 right-0 z-50 mx-auto w-full transition-all duration-500 ease-out",
-    variant === "marketing" ? (scrolled ? "mt-4 max-w-6xl" : "max-w-7xl") : "max-w-7xl"
+    scrolled ? "mt-4 max-w-6xl" : "max-w-7xl"
   );
 
   const navInnerClass = cn(
     "flex h-16 items-center justify-between px-6 transition-all duration-500 ease-out",
-    scrolled || variant === "dashboard"
+    scrolled
       ? "bg-zinc-950/85 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] mx-4"
       : "bg-transparent"
   );
@@ -227,21 +251,26 @@ export function SiteNavbar({ variant = "marketing", planBadge }: SiteNavbarProps
               </button>
               <div className="absolute left-0 top-full mt-3 w-80 bg-zinc-900/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl shadow-black/40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 overflow-hidden">
                 <div className="p-2">
-                  {section.links.map((link) => (
+                  {section.links.map((link) => {
+                    const IconComponent = link.icon;
+                    return (
                     <Link
                       key={link.label}
                       href={link.href}
-                      className="block p-3.5 rounded-xl hover:bg-white/5 transition-all duration-200"
+                      className="block p-3.5 rounded-xl hover:bg-white/5 transition-all duration-200 group/item"
                     >
                       <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 flex items-center justify-center flex-shrink-0" />
+                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-400/30 flex items-center justify-center flex-shrink-0 group-hover/item:from-indigo-500/30 group-hover/item:to-purple-500/30 group-hover/item:border-indigo-400/50 transition-all duration-200">
+                          <IconComponent className="w-5 h-5 text-indigo-300 group-hover/item:text-indigo-200 transition-colors duration-200" />
+                        </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-semibold text-white">{link.label}</p>
                           <p className="text-xs text-gray-400">{link.description}</p>
                         </div>
                       </div>
                     </Link>
-                  ))}
+                    );
+                  })}
                 </div>
                 <div className="px-4 py-3 bg-white/5 border-t border-white/10">
                   <Link
@@ -271,10 +300,10 @@ export function SiteNavbar({ variant = "marketing", planBadge }: SiteNavbarProps
           size="icon"
           variant="outline"
           onClick={() => setOpen((prev) => !prev)}
-          className="md:hidden border-white/20 hover:bg-white/5"
+          className="md:hidden cursor-pointer border-white/20 hover:bg-white/5"
           aria-label="Toggle menu"
         >
-          <MenuToggleIcon open={open} className="size-5 text-gray-300" duration={300} />
+          <MenuToggleIcon open={open} className="size-5 text-gray-600" duration={300} />
         </Button>
       </nav>
 
@@ -324,7 +353,7 @@ export function SiteNavbar({ variant = "marketing", planBadge }: SiteNavbarProps
                     </Link>
                     <Button
                       variant="outline"
-                      className="w-full border-white/20 text-white"
+                      className="w-full border-red-200/40 text-red-300 md:text-gray-600"
                       onClick={() => {
                         setOpen(false);
                         signOut({ callbackUrl: "/" });
@@ -336,7 +365,7 @@ export function SiteNavbar({ variant = "marketing", planBadge }: SiteNavbarProps
                 ) : (
                   <div className="flex flex-col gap-3">
                     <Link href="/signin" onClick={() => setOpen(false)}>
-                      <Button variant="outline" className="w-full border-white/20 text-white">
+                      <Button variant="outline" className="w-full border-white/20 text-gray-600">
                         Sign in
                       </Button>
                     </Link>

@@ -18,8 +18,8 @@ const plans = [
     buttonText: "Get started",
     buttonVariant: "outline" as const,
     includes: [
-      "Track up to 5 products",
-      "Real-time data from 3 platforms",
+      "Track up to 10 products",
+      "Real-time data from 5 platforms",
       "Basic sentiment analysis",
       "Weekly AI trend forecasts",
       "Email alerts",
@@ -41,12 +41,12 @@ const plans = [
     includes: [
       "Everything in Starter, plus:",
       "Track up to 50 products",
-      "All 7+ data sources",
+      "10+ data sources",
       "Advanced AI predictions & forecasts",
       "Real-time sentiment analysis",
       "Custom reports & analytics",
       "Competitor intelligence",
-      "Historical data (12 months)",
+      "Historical data (6 months)",
       "Export to CSV/Excel",
       "Priority email support",
       "Team collaboration (5 users)",
@@ -72,7 +72,6 @@ const plans = [
       "24/7 priority support",
       "Custom integrations",
       "Unlimited team members",
-      "SSO & advanced security",
     ],
   },
 ];

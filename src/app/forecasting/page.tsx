@@ -2,7 +2,8 @@
 
 import { motion, useInView } from 'motion/react';
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -10,6 +11,7 @@ import { ContainerScroll, CardSticky } from '@/components/blocks/cards-stack';
 import { SiteNavbar } from '@/components/navigation/SiteNavbar';
 import PricingSection from '../components/landing/PricingSection';
 import Footer from '../components/Footer';
+import { Button } from '@/components/ui/button';
 
 const heroStats = [
   { label: 'Signals reconciled each minute', value: '31K' },
@@ -26,7 +28,7 @@ const capabilityPillars = [
   {
     title: 'Narrative-grade forecasting',
     body:
-      'Explainable ensembles paint clear upside, base, and guardrail stories so solo leads and enterprise teams know what happens next.',
+      'Explainable ensembles paint clear upside, and base stories so solo leads and enterprise teams know what happens next.',
   },
   {
     title: 'Autonomous playbooks',
@@ -226,6 +228,17 @@ export default function PredictiveForecastingPage() {
 }
 
 function Hero() {
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+  const isDisabled = useMemo(() => !query.trim(), [query]);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const nextQuery = query.trim();
+    if (!nextQuery) return;
+    router.push(`/insights?query=${encodeURIComponent(nextQuery)}`);
+  };
+
   return (
     <section className="relative overflow-hidden" data-gradient-section>
       <div className="pointer-events-none absolute inset-0 opacity-60" data-gradient-layer>
@@ -258,6 +271,32 @@ function Hero() {
           >
             Volus AI blends commerce telemetry, audience mood, spend efficiency, and macro pressure into rolling stories the whole team can act on, no data science degree required.
           </motion.p>
+
+          <motion.form
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+            onSubmit={handleSubmit}
+            className="max-w-lg space-y-3"
+          >
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Forecast a product or category..."
+                className="flex-1 bg-white/5 border border-white/15 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/30 text-gray-100 rounded-full px-5 py-3 outline-none transition"
+                aria-label="Forecasting search"
+              />
+              <Button
+                type="submit"
+                disabled={isDisabled}
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold px-6 py-3 rounded-full h-auto"
+              >
+                Predict
+              </Button>
+            </div>
+          </motion.form>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -658,20 +697,8 @@ function MediaGallery() {
 function PricingBridge() {
   return (
     <section className="relative bg-transparent" data-gradient-section>
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(79,70,229,0.25),_transparent_60%)] opacity-60"
-        data-gradient-layer
-      />
-      <div className="relative z-10 space-y-10 px-6 py-16 text-center">
-        <div className="mx-auto max-w-3xl space-y-4">
-          <p className="text-xs uppercase tracking-[0.5em] text-indigo-200/70">Plans for every crew</p>
-          <h2 className="text-4xl font-semibold text-white">See the Volus engine in your dashboard after you subscribe.</h2>
-          <p className="text-sm text-white/70">
-            Solo operators get the same live forecasting canvas as global brands—just scoped to the channels you care about. Enterprise plans unlock deeper controls, seats, and white-glove signal wiring.
-          </p>
-        </div>
+   
         <PricingSection />
-      </div>
     </section>
   );
 }

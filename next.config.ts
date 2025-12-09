@@ -16,6 +16,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "randomuser.me",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "volus-public.s3.us-east-1.amazonaws.com",
         pathname: "/**",
       },

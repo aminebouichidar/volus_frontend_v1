@@ -143,8 +143,8 @@ export default function ControlRoomClient({ user, subscription }: DashboardClien
               const Icon = item.icon;
               return (
                 <div key={item.title} className="flex gap-4 rounded-2xl border border-white/5 bg-white/5 p-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-200">
-                    <Icon className="h-5 w-5" />
+                  <div className="flex p-2 h-12 w-12 items-center justify-center rounded-xl bg-indigo-500/20 text-indigo-200">
+                    <Icon className="h-4 w-4" />
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-white">{item.title}</p>

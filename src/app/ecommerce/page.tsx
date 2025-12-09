@@ -1,11 +1,14 @@
 "use client"
 
+import { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Footer from "../components/Footer";
 import { SiteNavbar } from "@/components/navigation/SiteNavbar";
 import PricingSection from "../components/landing/PricingSection";
 import CommerceIntelShowcase from "./CommerceIntelShowcase";
+import { Button } from "@/components/ui/button";
 
 const heroStats = [
   { label: "Avg. sales lift", value: "+18%" },
@@ -17,7 +20,7 @@ const heroStats = [
 const skewCards = [
   {
     title: "Marketplace command center",
-    desc: "Track buy-box health, price swings, and fulfillment SLAs across Amazon, Walmart, and Shopify in a single view.",
+    desc: "Track buy-box health, price swings, and fulfillment SLAs across Amazon, Target, and Shopify in a single view.",
     gradientFrom: "#7c3aed",
     gradientTo: "#312e81",
   },
@@ -121,6 +124,17 @@ const SkewInsightCard = ({
 );
 
 export default function EcommerceAnalyticsPage() {
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+  const isDisabled = useMemo(() => !query.trim(), [query]);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const nextQuery = query.trim();
+    if (!nextQuery) return;
+    router.push(`/insights?query=${encodeURIComponent(nextQuery)}`);
+  };
+
   return (
     <div className="relative min-h-screen bg-black text-white">
       <div className="pointer-events-none fixed inset-0 z-0 opacity-80">
@@ -142,11 +156,32 @@ export default function EcommerceAnalyticsPage() {
               <div className="grid gap-10 lg:grid-cols-[2fr_1fr]">
                 <div>
                   <h1 className="text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
-                    AI-powered intelligence turning every e-commerce signal into your advantage.
+                    AI-powered intelligence turning every e-commerce signal into <br />
+                    <span className="text-indigo-400">your advantage.</span>
                   </h1>
                   <p className="mt-6 text-lg text-gray-300">
                     We normalize every marketplace, DTC storefront, and retail media signal to reveal what is driving revenue, what is dragging margin, and which playbooks to trigger next.
                   </p>
+                  
+                  <form onSubmit={handleSubmit} className="mt-8 max-w-lg space-y-3">
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <input
+                        value={query}
+                        onChange={(event) => setQuery(event.target.value)}
+                        placeholder="Analyze a product or category..."
+                        className="flex-1 bg-white/5 border border-white/15 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/30 text-gray-100 rounded-full px-5 py-3 outline-none transition"
+                        aria-label="Ecommerce search"
+                      />
+                      <Button
+                        type="submit"
+                        disabled={isDisabled}
+                        className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold px-6 py-3 rounded-full h-auto"
+                      >
+                        Scan
+                      </Button>
+                    </div>
+                  </form>
+
                   <div className="mt-8 flex flex-wrap gap-4">
                     <Link
                       href="/insights"
@@ -175,10 +210,10 @@ export default function EcommerceAnalyticsPage() {
             <div className="mx-auto max-w-6xl rounded-3xl border border-white/5 bg-white/5 p-8 shadow-[0_20px_120px_-40px_rgba(79,70,229,0.8)]">
               <div className="grid gap-10 lg:grid-cols-2">
                 <div className="space-y-5">
-                  <p className="text-sm uppercase tracking-[0.35em] text-indigo-200">Noise to navigation</p>
+                  <p className="text-sm uppercase tracking-[0.35em ] text-indigo-200">Noise to navigation</p>
                   <h2 className="text-3xl font-semibold">One pipeline for commerce, sentiment, and supply data.</h2>
                   <p className="text-lg text-gray-300">
-                    Consolidate feeds from Amazon, Walmart, Shopify, TikTok Shop, Google, Reddit, and your ERP. Our agents enrich every row with taxonomy, attribution, and AI-explained anomalies so stakeholders skip straight to action.
+                    Consolidate feeds from Amazon, Target, Shopify, TikTok Shop, Google, Reddit, and your ERP. Our agents enrich every row with taxonomy, attribution, and AI-explained anomalies so stakeholders skip straight to action.
                   </p>
                   <ul className="space-y-3 text-gray-300">
                     <li className="flex items-start gap-3">

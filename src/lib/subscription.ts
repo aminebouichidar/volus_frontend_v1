@@ -5,6 +5,8 @@ import {
   getStripeClient,
 } from "@/lib/stripe";
 import { SubscriptionStatus } from "@prisma/client";
+import { SubscriptionInfo } from "@/types/subscription";
+import { determinePlanTier, PlanTier } from "@/lib/plan-tiers";
 
 interface EnsureTrialSubscriptionResult {
   status: SubscriptionStatus;
@@ -131,5 +133,77 @@ export async function ensureTrialSubscriptionForUser(
     currentPeriodEnd: storedSubscription.currentPeriodEnd,
     stripeCustomerId: storedSubscription.stripeCustomerId,
     stripeSubscriptionId: storedSubscription.stripeSubscriptionId,
+  };
+}
+
+export type UserSubscriptionPlan = SubscriptionInfo & {
+  tier: PlanTier;
+  isCanceled: boolean;
+};
+
+export async function getUserSubscriptionPlan(
+  userId: string | undefined
+): Promise<UserSubscriptionPlan> {
+  if (!userId) {
+    return {
+      status: "inactive",
+      trialEndsAt: null,
+      currentPeriodEnd: null,
+      stripeCustomerId: "",
+      stripeSubscriptionId: "",
+      priceId: null,
+      tier: "starter",
+      isCanceled: false,
+    };
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      stripeSubscriptionId: true,
+      stripeCustomerId: true,
+      subscriptionStatus: true,
+      trialEndsAt: true,
+      currentPlan: true,
+      subscription: {
+        select: {
+          currentPeriodEnd: true,
+        },
+      },
+    },
+  });
+
+  if (!user) {
+    return {
+      status: "inactive",
+      trialEndsAt: null,
+      currentPeriodEnd: null,
+      stripeCustomerId: "",
+      stripeSubscriptionId: "",
+      priceId: null,
+      tier: "starter",
+      isCanceled: false,
+    };
+  }
+
+  const isCanceled = false;
+
+  const subscriptionInfo: SubscriptionInfo = {
+    status: user.subscriptionStatus || "inactive",
+    trialEndsAt: user.trialEndsAt ? user.trialEndsAt.toISOString() : null,
+    currentPeriodEnd: user.subscription?.currentPeriodEnd
+      ? user.subscription.currentPeriodEnd.toISOString()
+      : null,
+    stripeCustomerId: user.stripeCustomerId || "",
+    stripeSubscriptionId: user.stripeSubscriptionId || "",
+    priceId: user.currentPlan,
+  };
+
+  const tier = determinePlanTier(subscriptionInfo);
+
+  return {
+    ...subscriptionInfo,
+    tier,
+    isCanceled,
   };
 }

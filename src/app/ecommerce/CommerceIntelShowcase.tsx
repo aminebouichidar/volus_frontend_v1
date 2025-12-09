@@ -84,7 +84,7 @@ const IntegrationsCard = () => (
     <CardHeader>
       <CardTitle className="text-lg">Live integrations</CardTitle>
       <CardDescription className="text-sm text-gray-300">
-        Amazon, Shopify, Walmart, TikTok Shop, Klaviyo, GA4
+        Amazon, Shopify, Target, TikTok Shop, Meta
       </CardDescription>
     </CardHeader>
     <CardContent className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.35em] text-indigo-200">

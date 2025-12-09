@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const DEFAULT_DASHBOARD_SERVICE_URL = "http://192.168.0.216:8000";
+const DEFAULT_DASHBOARD_SERVICE_URL = "http://127.0.0.1:8001";
 const DASHBOARD_SERVICE_URL =
   process.env.DASHBOARD_SERVICE_URL?.replace(/\/$/, "") ||
   DEFAULT_DASHBOARD_SERVICE_URL;

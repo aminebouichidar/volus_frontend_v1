@@ -102,7 +102,7 @@ const ProductSentimentLanding = () => {
               {[
                 {
                   title: 'Marketplace Radar',
-                  description: 'Scrape and normalize product performance across Amazon, eBay, Walmart, and other marketplaces to expose velocity and stock health.',
+                  description: 'Scrape and normalize product performance across Amazon, eBay, Target, and other marketplaces to expose velocity and stock health.',
                   icon: <ShoppingCart className="w-5 h-5" />
                 },
                 {

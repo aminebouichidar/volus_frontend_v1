@@ -51,7 +51,7 @@ const pricingTiers = [
       "Real-time sentiment analysis",
       "Custom reports & analytics",
       "Competitor intelligence",
-      "Historical data (12 months)",
+      "Historical data (6 months)",
       "Export to CSV/Excel",
       "Priority email support",
       "Team collaboration (5 users)",

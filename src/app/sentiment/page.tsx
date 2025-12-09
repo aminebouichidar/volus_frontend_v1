@@ -1,4 +1,8 @@
 
+"use client"
+
+import { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AnimatedText } from "@/components/ui/animated-underline-text";
@@ -22,7 +26,7 @@ const signalSources = [
     id: "marketplace",
     title: "Marketplace Pulse",
     description:
-      "Amazon, eBay, Walmart, Etsy velocity paired with review tone to expose product perception and stock health.",
+      "Amazon, eBay, Target, Etsy velocity paired with review tone to expose product perception and stock health.",
     icon: Globe2,
     badge: "Commerce",
     backDescription:
@@ -97,6 +101,17 @@ function BackgroundAura() {
 }
 
 function Hero() {
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+  const isDisabled = useMemo(() => !query.trim(), [query]);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const nextQuery = query.trim();
+    if (!nextQuery) return;
+    router.push(`/insights?query=${encodeURIComponent(nextQuery)}`);
+  };
+
   const stats = [
     { label: "Signals / min", value: "2.4M" },
     { label: "Platforms", value: "38" },
@@ -122,6 +137,26 @@ function Hero() {
           <p className="mt-6 text-lg text-gray-300 max-w-2xl">
             Volus AI fuses marketplace data, social buzz, and operational signals into one emotional truth so your team can respond before trends hit the headlines.
           </p>
+
+          <form onSubmit={handleSubmit} className="mt-8 max-w-lg space-y-3">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Analyze sentiment for..."
+                className="flex-1 bg-white/5 border border-white/15 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/30 text-gray-100 rounded-full px-5 py-3 outline-none transition"
+                aria-label="Sentiment search"
+              />
+              <Button
+                type="submit"
+                disabled={isDisabled}
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold px-6 py-3 rounded-full h-auto"
+              >
+                Analyze
+              </Button>
+            </div>
+          </form>
+
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
             <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white px-8 h-12 rounded-full text-base">
               <Link href="/signup">Start 14-day Trial</Link>

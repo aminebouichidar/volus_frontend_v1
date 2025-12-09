@@ -5,6 +5,7 @@ import { DashboardShell } from "../components/DashboardShell";
 import { determinePlanTier, hasPlanAccess, PlanTier } from "@/lib/plan-tiers";
 import { Button } from "@/components/ui/button";
 import { CreditCard, HeartHandshake, Shield } from "lucide-react";
+import Link from "next/link";
 
 const PLAN_FEATURES: Record<PlanTier, string[]> = {
   starter: ["5 signal monitors", "Daily email brief", "Slack alerts"],
@@ -65,12 +66,8 @@ export default async function BillingPage() {
                 ))}
               </ul>
               {!isCurrent && (
-                <Button
-                  className="mt-4 w-full rounded-full bg-white text-black hover:bg-gray-200"
-                  variant="secondary"
-                  onClick={() => (window.location.href = "/#pricing")}
-                >
-                  Switch to {readableLabel}
+                <Button asChild className="mt-4 w-full rounded-full bg-white text-black hover:bg-gray-200" variant="secondary">
+                  <Link href="/#pricing">Switch to {readableLabel}</Link>
                 </Button>
               )}
             </div>

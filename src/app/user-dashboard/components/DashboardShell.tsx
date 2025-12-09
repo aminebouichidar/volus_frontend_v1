@@ -11,6 +11,9 @@ import {
   PackageSearch,
   ShieldCheck,
   UserCog,
+  Building2,
+  BarChart3,
+  ShieldAlert,
 } from "lucide-react";
 import { SubscriptionInfo } from "@/types/subscription";
 import {
@@ -29,13 +32,6 @@ const NAV_LINKS = [
     label: "Overview",
     href: "/user-dashboard",
     icon: LayoutDashboard,
-    requiredTier: "starter" as PlanTier,
-  },
-  {
-    key: "profile",
-    label: "Profile & Settings",
-    href: "/user-dashboard/profile",
-    icon: UserCog,
     requiredTier: "starter" as PlanTier,
   },
   {
@@ -59,6 +55,34 @@ const NAV_LINKS = [
     icon: CreditCard,
     requiredTier: "starter" as PlanTier,
   },
+  {
+    key: "monitoring",
+    label: "Monitoring & Alerts",
+    href: "/user-dashboard/monitoring",
+    icon: ShieldCheck,
+    requiredTier: "starter" as PlanTier,
+  },
+  {
+    key: "brand",
+    label: "Brand Protection",
+    href: "/user-dashboard/brand",
+    icon: ShieldAlert,
+    requiredTier: "pro" as PlanTier,
+  },
+  {
+    key: "playbooks",
+    label: "Growth Playbooks",
+    href: "/user-dashboard/playbooks",
+    icon: BarChart3,
+    requiredTier: "starter" as PlanTier,
+  },
+  {
+    key: "enterprise",
+    label: "Enterprise Control",
+    href: "/user-dashboard/enterprise",
+    icon: Building2,
+    requiredTier: "enterprise" as PlanTier,
+  },
 ];
 
 interface DashboardShellProps {
@@ -73,6 +97,7 @@ export function DashboardShell({
   children,
 }: DashboardShellProps) {
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const planTier = determinePlanTier(subscription);
   const trialMode = isTrialPlan(subscription);
   const trialEndsAt = subscription?.trialEndsAt
@@ -91,8 +116,22 @@ export function DashboardShell({
       <SiteNavbar variant="dashboard" planBadge={planBadge} />
 
       <main className="mx-auto max-w-7xl px-4 pt-28 pb-10 sm:px-6 lg:px-8">
+        <div className="lg:hidden mb-6">
+          <Button 
+            variant="outline" 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="w-full justify-between border-white/10 bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white"
+          >
+            <span className="flex items-center gap-2">
+              <LayoutDashboard className="h-4 w-4" />
+              Dashboard Menu
+            </span>
+            <span className="text-xs uppercase tracking-wider text-gray-500">{mobileMenuOpen ? "Hide" : "Show"}</span>
+          </Button>
+        </div>
+
         <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
-          <aside className="space-y-6">
+          <aside className={cn("space-y-6", !mobileMenuOpen && "hidden lg:block")}>
             <nav className="rounded-3xl border border-white/10 bg-white/5 p-4">
               <p className="mb-4 text-xs uppercase tracking-[0.35em] text-gray-400">Workspace</p>
               <div className="space-y-2">
@@ -137,14 +176,14 @@ export function DashboardShell({
               </div>
             </nav>
 
-            <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-indigo-600/20 via-purple-600/10 to-black p-4">
+            <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-indigo-600/20 via-purple-600/10 to-black p-3">
               <p className="text-xs uppercase tracking-[0.35em] text-indigo-100">Plan status</p>
-              <h3 className="mt-2 text-2xl font-semibold text-white">{planLabel(planTier)} {trialMode ? 'trial' : 'plan'}</h3>
-              <p className="mt-2 text-sm text-indigo-100/80">{planDescription(planTier, trialMode, daysLeft)}</p>
-              <div className="mt-4 flex gap-3">
+              <h3 className="mt-1 text-xl font-semibold text-white">{planLabel(planTier)} {trialMode ? 'trial' : 'plan'}</h3>
+              <p className="mt-1 text-xs text-indigo-100/80">{planDescription(planTier, trialMode, daysLeft)}</p>
+              <div className="mt-4 flex gap-1">
                 <Button
                   onClick={() => (planTier === 'starter' ? setShowUpgrade(true) : window.open('/api/billing/create-portal-session', '_self'))}
-                  className="flex-1 bg-white text-black hover:bg-gray-200"
+                  className="flex-1 text-xs cursor-pointer bg-white text-black hover:bg-gray-200"
                 >
                   {planTier === 'starter' ? 'Upgrade plan' : 'Manage billing'}
                 </Button>
@@ -152,7 +191,7 @@ export function DashboardShell({
                   <Button
                     variant="outline"
                     onClick={() => setShowUpgrade(true)}
-                    className="flex-1 border-white/30 bg-white/5 text-white hover:bg-white/10"
+                    className="flex-1 text-xs border-white/30 bg-white/5 text-white hover:bg-white/10"
                   >
                     Compare tiers
                   </Button>
