@@ -57,7 +57,7 @@ export const GridSection = ({
       )}
       
       {description && (
-        <p className="mx-auto max-w-[800px] text-center text-xl !leading-[2] text-foreground/50 md:text-2xl mb-8">
+        <p className="mx-auto max-w-[800px] text-center text-xl !leading-[2] text-white/30 md:text-2xl mb-8">
           {description}
         </p>
       )}

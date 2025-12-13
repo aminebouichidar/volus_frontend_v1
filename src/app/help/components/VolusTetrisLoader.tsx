@@ -128,7 +128,7 @@ export function VolusTetrisLoader() {
         </div>
       </div>
       <p className="text-xs tracking-[0.4em] uppercase text-gray-400">
-        Aligning VOLUS intelligence
+        Thinking ...
       </p>
       <style jsx>{`
         @keyframes volusDrop {

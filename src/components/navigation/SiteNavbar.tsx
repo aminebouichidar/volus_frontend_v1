@@ -41,11 +41,9 @@ const platformLinks: NavLink[] = [
 
 const solutionsLinks: NavLink[] = [
   { label: "E-commerce Analytics", href: "/ecommerce", description: "Optimize your online sales", icon: ShoppingCart },
-  { label: "Brand Monitoring", href: "/brand", description: "Protect your reputation", icon: Shield },
   { label: "Competitor Analysis", href: "/competitor", description: "Stay ahead of the market", icon: Users },
   { label: "Demand Forecasting", href: "/forecasting", description: "Plan inventory effectively", icon: TrendingUp },
-  { label: "Enterprise Control Room", href: "/enterprise-control", description: "Governance, alerts, exec rollups", icon: Shield },
-  { label: "Growth Playbooks", href: "/growth-playbooks", description: "Action plans for any team size", icon: BarChart3 },
+  
 ];
 
 const resourcesLinks: NavLink[] = [

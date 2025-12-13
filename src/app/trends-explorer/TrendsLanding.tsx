@@ -496,7 +496,7 @@ function TestimonialSection() {
         <p className="mt-6 text-2xl sm:text-3xl text-gray-200">
           &ldquo;We used Volus AI to spot the &apos;portable blender&apos; trend 3 weeks before it peaked. We sold out our inventory while competitors were just placing orders.&rdquo;
         </p>
-        <p className="mt-4 text-sm text-gray-400">Director of Product · E-Comm Ventures</p>
+        <p className="mt-4 text-sm text-gray-400">Director of Product · WestBK Ecom</p>
       </div>
     </section>
   );

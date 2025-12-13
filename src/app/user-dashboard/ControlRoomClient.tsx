@@ -124,7 +124,7 @@ export default function ControlRoomClient({ user, subscription }: DashboardClien
               Hi {user.name?.split(" ")[0] ?? "there"}, your market is moving.
             </h1>
             <p className="mt-4 max-w-2xl text-base text-gray-300">
-              FastAPI is streaming every marketplace, social, and ops pulse into this workspace. Share these modules with your brand, ops, and finance teams or trigger automations directly.
+              VOLUS AI is streaming every marketplace, social, and ops pulse into this workspace. Share these modules with your brand, ops, and finance teams or trigger automations directly.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button asChild className="rounded-full bg-white px-6 text-black hover:bg-gray-200">

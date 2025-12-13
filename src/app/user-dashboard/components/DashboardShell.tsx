@@ -70,13 +70,6 @@ const NAV_LINKS = [
     requiredTier: "pro" as PlanTier,
   },
   {
-    key: "playbooks",
-    label: "Growth Playbooks",
-    href: "/user-dashboard/playbooks",
-    icon: BarChart3,
-    requiredTier: "starter" as PlanTier,
-  },
-  {
     key: "enterprise",
     label: "Enterprise Control",
     href: "/user-dashboard/enterprise",

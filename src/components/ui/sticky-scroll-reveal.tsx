@@ -25,9 +25,11 @@ export const StickyScroll: React.FC<StickyScrollProps> = ({
   });
 
   const gradients = [
-    "linear-gradient(135deg, rgba(79,70,229,0.9), rgba(14,165,233,0.85))",
-    "linear-gradient(135deg, rgba(236,72,153,0.9), rgba(99,102,241,0.85))",
-    "linear-gradient(135deg, rgba(16,185,129,0.9), rgba(59,130,246,0.7))",
+    "linear-gradient(135deg, rgba(59,130,246,0.3), rgba(14,165,233,0.2))",
+    "linear-gradient(135deg, rgba(168,85,247,0.3), rgba(99,102,241,0.2))",
+    "linear-gradient(135deg, rgba(16,185,129,0.3), rgba(59,130,246,0.2))",
+    "linear-gradient(135deg, rgba(236,72,153,0.3), rgba(168,85,247,0.2))",
+    "linear-gradient(135deg, rgba(245,158,11,0.3), rgba(236,72,153,0.2))",
   ];
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
@@ -48,48 +50,78 @@ export const StickyScroll: React.FC<StickyScrollProps> = ({
   return (
     <motion.div
       ref={containerRef}
-      animate={{
-        backgroundColor: ["#030712", "#020617", "#050505"],
+      className="h-[36rem] w-full overflow-y-auto rounded-3xl bg-transparent p-8 md:p-12 scrollbar-hide"
+      style={{
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
       }}
-      transition={{ duration: 0.8, ease: "easeInOut" }}
-      className="h-[32rem] w-full overflow-y-auto rounded-[32px] border border-white/10 p-10 backdrop-blur-xl shadow-[0_40px_120px_-60px_rgba(15,23,42,0.9)]"
     >
-      <div className="flex flex-col lg:flex-row gap-10">
-        <div className="flex-1 space-y-12">
+      <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
+        {/* Text Content */}
+        <div className="flex-1 space-y-16 lg:space-y-20">
           {content.map((item, index) => (
-            <div key={`${item.title}-${index}`} className="space-y-4">
-              <motion.h3
-                initial={{ opacity: 0.3 }}
-                animate={{ opacity: activeCard === index ? 1 : 0.35 }}
-                transition={{ duration: 0.4 }}
-                className="text-2xl font-semibold text-white"
-              >
-                {item.title}
-              </motion.h3>
-              <motion.p
-                initial={{ opacity: 0.3 }}
-                animate={{ opacity: activeCard === index ? 1 : 0.35 }}
-                transition={{ duration: 0.4 }}
-                className="text-base text-gray-300 max-w-2xl"
-              >
+            <motion.div 
+              key={`${item.title}-${index}`} 
+              className="space-y-4"
+              initial={{ opacity: 0.3 }}
+              animate={{ 
+                opacity: activeCard === index ? 1 : 0.25,
+                x: activeCard === index ? 0 : -10,
+              }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              <div className="flex items-center gap-4">
+                <span className={cn(
+                  "inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold transition-all duration-300",
+                  activeCard === index 
+                    ? "bg-blue-500/20 text-blue-300 border border-blue-500/30" 
+                    : "bg-white/5 text-gray-500 border border-white/10"
+                )}>
+                  {index + 1}
+                </span>
+                <h3 className={cn(
+                  "text-2xl lg:text-3xl font-bold transition-colors duration-300",
+                  activeCard === index ? "text-white" : "text-gray-500"
+                )}>
+                  {item.title}
+                </h3>
+              </div>
+              <p className={cn(
+                "text-base lg:text-lg leading-relaxed max-w-xl pl-12 transition-colors duration-300",
+                activeCard === index ? "text-gray-300" : "text-gray-600"
+              )}>
                 {item.description}
-              </motion.p>
-            </div>
+              </p>
+            </motion.div>
           ))}
-          <div className="h-12" />
+          <div className="h-24" />
         </div>
-        <div className="hidden lg:block w-80 flex-shrink-0">
-          <div
+
+        {/* Visual Content */}
+        <div className="hidden lg:block w-[340px] flex-shrink-0">
+          <motion.div
             className={cn(
-              "sticky top-6 h-72 w-full overflow-hidden rounded-3xl border border-white/10 shadow-2xl",
+              "sticky top-8 h-80 w-full overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-black/50",
               contentClassName
             )}
             style={{
               background: gradients[activeCard % gradients.length],
             }}
+            animate={{
+              background: gradients[activeCard % gradients.length],
+            }}
+            transition={{ duration: 0.6 }}
           >
-            {content[activeCard]?.content ?? null}
-          </div>
+            <motion.div
+              key={activeCard}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4 }}
+              className="h-full w-full"
+            >
+              {content[activeCard]?.content ?? null}
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </motion.div>
