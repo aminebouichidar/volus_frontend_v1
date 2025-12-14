@@ -32,8 +32,8 @@ interface NavLink {
 }
 
 const platformLinks: NavLink[] = [
-  { label: "Trend Explorer", href: "/trends-explorer", description: "See hottest multi-source products", icon: TrendingUp },
-  { label: "Semantic Search", href: "/semantic-search", description: "Natural language product discovery", icon: ScanEye },
+  { label: "Trend Explorer", href: "/trends-explorer", description: "See hottest products per category", icon: TrendingUp },
+  { label: "Semantic Search", href: "/semantic-search", description: "Multi source product discovery", icon: ScanEye },
   { label: "Prediction Lab", href: "/prediction-lab", description: "Forward-looking demand simulations", icon: BarChart3 },
   { label: "Sentiment Analysis", href: "/sentiment", description: "Track customer emotions across platforms", icon: SmilePlus },
   { label: "Multi-Channel Monitoring", href: "/monitoring", description: "Amazon, eBay, Social & more", icon: ScanEye },
